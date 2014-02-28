@@ -1,0 +1,31 @@
+{
+  "name": "ansible-bridge",
+  "version": "0.1.0",
+  "description": "RESTful API for executing Ansible tasks and playbooks",
+  "main": "bridge.js",
+  "scripts": {
+    "test": "mocha test/** --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/shaharke/ansible-bridge.git"
+  },
+  "keywords": [
+    "ansible",
+    "rest",
+    "api",
+    "http",
+    "automation"
+  ],
+  "author": "Shahar Kedar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shaharke/ansible-bridge/issues"
+  },
+  "dependencies": {
+    "node-ansible": "~0.2.1",
+    "express": "3.4.8",
+    "underscore": "^1.6.0",
+    "express-domain-errors": "0.0.2"
+  }
+}
