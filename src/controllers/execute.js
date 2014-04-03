@@ -1,17 +1,19 @@
+module.exports = function(inventory) {
 
-var Ansible = require('node-ansible');
+    var Ansible = require('node-ansible');
 
-var inventory;
+    return {
+        executePlaybook : function(req, res) {
+            var playbook = new Ansible.Playbook().playbook(req.params.name).inventory(inventory);
+            execute(playbook, res);
+        },
 
-module.exports.executePlaybook = function(req, res) {
-    var playbook = new Ansible.Playbook().playbook(req.params.name).inventory(inventory);
-    execute(playbook, res);
-}
-
-module.exports.executeCommand = function(req, res) {
-    var command = new Ansible.AdHoc().module(req.params.module).hosts(req.params.hosts).args(req.params.args)
-        .inventory(inventory);
-    execute(command, res);
+        executeCommand : function(req, res) {
+        var command = new Ansible.AdHoc().module(req.params.module).hosts(req.params.hosts).args(req.params.args)
+            .inventory(inventory);
+        execute(command, res);
+        }
+    }
 }
 
 function execute(exec, res) {
@@ -27,8 +29,4 @@ function execute(exec, res) {
         res.status(400);
         res.send(error);
     })
-}
-
-module.exports.setInventory = function(newInventory) {
-    inventory = newInventory;
 }
