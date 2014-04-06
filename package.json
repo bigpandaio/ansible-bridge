@@ -26,6 +26,13 @@
     "node-ansible": "~0.2.1",
     "express": "3.4.8",
     "underscore": "^1.6.0",
-    "express-domain-errors": "0.0.2"
+    "express-domain-errors": "0.0.2",
+    "q": "^1.0.1"
+  },
+  "devDependencies": {
+    "mocha": "^1.18.2",
+    "chai": "^1.9.1",
+    "sinon": "^1.9.1",
+    "chai-http": "^0.4.0"
   }
 }
