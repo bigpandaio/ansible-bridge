@@ -16,7 +16,7 @@ exports.executePlaybook = function (playbookName, options) {
         // here should add optional flags handling
 
         if (options.extraVars && Object.keys(options.extraVars).length != 0) {
-            playbook.variables(extraVars);
+            playbook.variables(options.extraVars);
         }
     }
 

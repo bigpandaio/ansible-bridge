@@ -1,32 +1,21 @@
-var executer = require('./executer');
+var executor = require('./executor');
 
-module.exports = function () {
+exports.parseCommand = function (req, res) {
+    var module = req.params.module,
+        hosts = req.params.hosts,
+        args = req.params.args;
 
-    return {
-        parsePlaybook: function (req, res) {
-            var playbookName = req.params.name;
+    var execResult = executor.executeCommand(module, hosts, args);
 
-            var vars = {};
+    parseResult(execResult, res);
+};
 
-            if (req.body && req.body.extraVars) {
-                vars = req.body.extraVars;
-            }
+exports.parsePlayBook = function (req, res) {
 
-            var execResult = executer.executePlaybook(playbookName, vars);
+    var playbookName = req.params.name;
+    var execResult = executor.executePlaybook(playbookName, req.body);
 
-            parseResult(execResult, res);
-        },
-
-        parseCommand: function (req, res) {
-            var module = req.params.module,
-                hosts = req.params.hosts,
-                args = req.params.args;
-
-            var execResult = executer.executeCommand(module, hosts, args);
-
-            parseResult(execResult, res);
-        }
-    }
+    parseResult(execResult, res);
 };
 
 function parseResult(execResult, res) {

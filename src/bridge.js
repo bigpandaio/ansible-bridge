@@ -11,7 +11,7 @@ var app = express()
 require('./config/express')(app)
 
 // Setup routs
-require('./config/routes')(app, config)
+require('./config/routes')(app)
 
 // Start the app by listening on <port>
 var port = process.env.PORT || config.port;
