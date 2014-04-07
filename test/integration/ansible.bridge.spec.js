@@ -3,13 +3,12 @@ var chai = require('chai')
     expect = require('chai').expect;
 
 chai.use(chaiHttp);
-require('../../index');
 
 describe('sending a request to ansible-bridge', function () {
 
     describe('sending a command request to ansible-bridge', function () {
 
-        describe('successful request to perform echo', function () {
+        describe('sending a successful request to perform echo', function () {
 
             it('should result with status code 200', function (done) {
                 chai.request('http://localhost:9999').get("/command/shell/localhost/echo%20'shush'")
@@ -20,7 +19,7 @@ describe('sending a request to ansible-bridge', function () {
             });
         });
 
-        describe('request with a non-existing module', function () {
+        describe('sending a command request with a non-existing module', function () {
 
             it('should result with status code 400', function (done) {
                 chai.request('http://localhost:9999')
@@ -45,14 +44,47 @@ describe('sending a request to ansible-bridge', function () {
             });
         });
 
-        describe('successful request to run a playbook', function () {
+        describe('sending a successful request to run a playbook with no extra-vars', function () {
 
             it('should result with status code 200', function (done) {
-                var path = process.cwd() + '/test/fixtures';
-                console.log(path);
+                var path = process.cwd() + '/test/fixtures/echo_playbook';
+                path = "/playbook/" + path.replace(/\//g, '%2F');
+
                 chai.request('http://localhost:9999')
-                    .get("/playbook/%2FUsers%2Fshush%2Ftest_playbook").res(function (res) {
+                    .get(path).res(function (res) {
                         expect(res).to.have.status(200);
+                        done();
+                    });
+            });
+        });
+
+        describe('successful request to run a playbook that expects extra-vars', function () {
+
+            it('should result with status code 200', function (done) {
+                var path = process.cwd() + '/test/fixtures/echo_with_var_playbook';
+                path = "/playbook/" + path.replace(/\//g, '%2F');
+
+                chai.request('http://localhost:9999')
+                    .post(path).req(function (req) {
+                        req.send({extraVars: {name: 'shush'}})
+                    }).res(function (res) {
+                        expect(res).to.have.status(200);
+                        done();
+                    });
+            });
+        });
+
+        describe('send request to run a playbook that expects extra-vars with no extra-vars', function () {
+
+            it('should result with status code 400', function (done) {
+                var path = process.cwd() + '/test/fixtures/echo_with_var_playbook';
+                path = "/playbook/" + path.replace(/\//g, '%2F');
+
+                chai.request('http://localhost:9999')
+                    .post(path).req(function (req) {
+                        req.send({extraVars: {}})
+                    }).res(function (res) {
+                        expect(res).to.have.status(400);
                         done();
                     });
             });
